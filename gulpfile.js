@@ -1,80 +1,98 @@
-var gulp = require('gulp');
-var sass = require('gulp-sass');
-var header = require('gulp-header');
-var cleanCSS = require('gulp-clean-css');
-var rename = require("gulp-rename");
-var pkg = require('./package.json');
-var browserSync = require('browser-sync').create();
+var gulp        = require('gulp'),
+	plumber     = require('gulp-plumber'),
+	browserSync = require('browser-sync'),
+	stylus      = require('gulp-stylus'),
+	uglify      = require('gulp-uglify'),
+	concat      = require('gulp-concat'),
+	jeet        = require('jeet'),
+	rupture     = require('rupture'),
+	koutoSwiss  = require('kouto-swiss'),
+	prefixer    = require('autoprefixer-stylus'),
+	imagemin    = require('gulp-imagemin'),
+	cp          = require('child_process');
 
-// Set the banner content
-var banner = ['/*!\n',
-  ' * Start Bootstrap - <%= pkg.title %> v<%= pkg.version %> (<%= pkg.homepage %>)\n',
-  ' * Copyright 2013-' + (new Date()).getFullYear(), ' <%= pkg.author %>\n',
-  ' * Licensed under <%= pkg.license %> (https://github.com/BlackrockDigital/<%= pkg.name %>/blob/master/LICENSE)\n',
-  ' */\n',
-  ''
-].join('');
+var messages = {
+	jekyllBuild: '<span style="color: grey">Running:</span> $ jekyll build'
+};
 
-// Copy third party libraries from /node_modules into /vendor
-gulp.task('vendor', function() {
+var jekyllCommand = (/^win/.test(process.platform)) ? 'jekyll.bat' : 'jekyll';
 
-  // Bootstrap
-  gulp.src([
-      './node_modules/bootstrap/dist/**/*',
-      '!./node_modules/bootstrap/dist/css/bootstrap-grid*',
-      '!./node_modules/bootstrap/dist/css/bootstrap-reboot*'
-    ])
-    .pipe(gulp.dest('./vendor/bootstrap'))
-
-  // jQuery
-  gulp.src([
-      './node_modules/jquery/dist/*',
-      '!./node_modules/jquery/dist/core.js'
-    ])
-    .pipe(gulp.dest('./vendor/jquery'))
-
+/**
+ * Build the Jekyll Site
+ */
+gulp.task('jekyll-build', function (done) {
+	browserSync.notify(messages.jekyllBuild);
+	return cp.spawn(jekyllCommand, ['build'], {stdio: 'inherit'})
+		.on('close', done);
 });
 
-// Compile SCSS
-gulp.task('css:compile', function() {
-  return gulp.src('./scss/**/*.scss')
-    .pipe(sass.sync({
-      outputStyle: 'expanded'
-    }).on('error', sass.logError))
-    .pipe(gulp.dest('./css'))
+/**
+ * Rebuild Jekyll & do page reload
+ */
+gulp.task('jekyll-rebuild', ['jekyll-build'], function () {
+	browserSync.reload();
 });
 
-// Minify CSS
-gulp.task('css:minify', ['css:compile'], function() {
-  return gulp.src([
-      './css/*.css',
-      '!./css/*.min.css'
-    ])
-    .pipe(cleanCSS())
-    .pipe(rename({
-      suffix: '.min'
-    }))
-    .pipe(gulp.dest('./css'))
-    .pipe(browserSync.stream());
+/**
+ * Wait for jekyll-build, then launch the Server
+ */
+gulp.task('browser-sync', ['jekyll-build'], function() {
+	browserSync({
+		server: {
+			baseDir: '_site'
+		}
+	});
 });
 
-// CSS
-gulp.task('css', ['css:compile', 'css:minify']);
-
-// Default task
-gulp.task('default', ['css', 'vendor']);
-
-// Configure the browserSync task
-gulp.task('browserSync', function() {
-  browserSync.init({
-    server: {
-      baseDir: "./"
-    }
-  });
+/**
+ * Stylus task
+ */
+gulp.task('stylus', function(){
+		gulp.src('src/styl/main.styl')
+		.pipe(plumber())
+		.pipe(stylus({
+			use:[koutoSwiss(), prefixer(), jeet(),rupture()],
+			compress: true
+		}))
+		.pipe(gulp.dest('_site/assets/css/'))
+		.pipe(browserSync.reload({stream:true}))
+		.pipe(gulp.dest('assets/css'))
 });
 
-// Dev task
-gulp.task('dev', ['css', 'browserSync'], function() {
-  gulp.watch('./scss/*.scss', ['css']);
-  gulp.watch('./*.html', browserSync.reload);
+/**
+ * Javascript Task
+ */
+gulp.task('js', function(){
+	return gulp.src('src/js/**/*.js')
+		.pipe(plumber())
+		.pipe(concat('main.js'))
+		.pipe(uglify())
+		.pipe(gulp.dest('assets/js/'))
 });
+
+/**
+ * Imagemin Task
+ */
+gulp.task('imagemin', function() {
+	return gulp.src('src/img/**/*.{jpg,png,gif}')
+		.pipe(plumber())
+		.pipe(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true }))
+		.pipe(gulp.dest('assets/img/'));
+});
+
+/**
+ * Watch stylus files for changes & recompile
+ * Watch html/md files, run jekyll & reload BrowserSync
+ */
+gulp.task('watch', function () {
+	gulp.watch('src/styl/**/*.styl', ['stylus']);
+	gulp.watch('src/js/**/*.js', ['js']);
+	gulp.watch('src/img/**/*.{jpg,png,gif}', ['imagemin']);
+	gulp.watch(['*.html', '_includes/*.html', '_layouts/*.html', '_posts/*'], ['jekyll-rebuild']);
+});
+
+/**
+ * Default task, running just `gulp` will compile the sass,
+ * compile the jekyll site, launch BrowserSync & watch files.
+ */
+gulp.task('default', ['js', 'stylus', 'browser-sync', 'watch']);

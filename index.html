@@ -1,151 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
+---
+layout: default
+---
 
-  <head>
+<main id="scroll" class="home" role="main" itemprop="mainContentOfPage" itemscope="itemscope" itemtype="http://schema.org/Blog">
+    {% for post in site.posts %}
+        <article role="article" class="post-item" itemscope="itemscope" itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
+                <a class="datetime" href="{{ post.url | prepend: site.baseurl }}">
+                    <meta itemprop="datePublished" content="{{post.date}}">
+                    <time datetime="{{ post.date | date_to_xmlschema }}">
+                        <span class="day">
+                            {{ post.date | date: "%d" }}
+                        </span>
+                        <span class="month-year">
+                            {{ post.date | date: "%B %Y" }}
+                        </span>
+                    </time>
+                </a>
+                <div class="content">
+                    <a href="{{ post.url | prepend: site.baseurl }}"><h2 class="post-title" itemprop="name">{{ post.title }}</h2></a>
+                    <p class="description">
+                        {{ post.content | strip_html | truncatewords:40 }}
+                        <a href="{{ post.url | prepend: site.baseurl }}" class="link">Read more about {{post.title}}</a>
+                    </p>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>Tiger Cross</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom fonts for this template -->
-    <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="css/one-page-wonder.css" rel="stylesheet">
-
-  </head>
-
-  <body>
-
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
-      <div class="container">
-        <a class="navbar-brand" href="#">Tiger Cross</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <i><a href="https://github.com/Tiger-Cross"><span class="ic-github"></span>GitHub</a></i>
-            </li>
-            <li class="nav-item">
-              <i><a href="https://www.linkedin.com/in/tiger-cross/"><span class="ic-linkedin"></span>LinkedIn</a></i>
-            </li>
-            <li class="nav-item">
-              <i><a href="mailto:tiger.cross17@gmail.com"><span class="ic-mail"></span>Email</a></i>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-
-    <!-- title area-->
-    <header class="masthead text-center text-white">
-      <div class="masthead-content">
-        <div class="container">
-          <h1 class="masthead-heading mb-0">Tiger Cross</h1>
-          <h2 class="masthead-subheading mb-0">Software Developer</h2>
-          <a href="TigerCrossCV.pdf" class="btn btn-primary btn-xl rounded-pill mt-5">Here's my CV</a>
-        </div>
-      </div>
-      <div class="bg-circle-1 bg-circle"></div>
-      <div class="bg-circle-2 bg-circle"></div>
-      <div class="bg-circle-3 bg-circle"></div>
-      <div class="bg-circle-4 bg-circle"></div>
-    </header>
-
-    <section>
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-lg-6 order-lg-2">
-            <div class="p-5">
-              <img class="img-fluid rounded-circle" src="img/01.jpg" alt="">
-            </div>
-          </div>
-          <div class="col-lg-6 order-lg-1">
-            <div class="p-5">
-              <h2 class="display-4">My Life So Far...</h2>
-              <p> I'm a 20 year old student studying Computing at Imperial College
-London. I grew up in a small town called Oulton Broad in Suffolk, where I live
-with my parents and my younger brother. Although, currently I enjoy living in
-London, my favourite part being sitting in hyde park when it's sunny and doing
-work. As well as this, I like to relax with my friends going to a club or
-a bar.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-lg-6">
-            <div class="p-5">
-              <img class="img-fluid rounded-circle" src="img/02.jpg" alt="">
-            </div>
-          </div>
-          <div class="col-lg-6">
-            <div class="p-5">
-              <h2 class="display-4">My Developer Side</h2>
-              <p>Prior to university the majority of my studies have been
-                mathematics based but I have quickly become competent in Java,
-                Haskell, C, Python and HTML. In addition, I tutor JavaScript to high
-                school students on the weekends in the hopes that it will
-                further their computing education. My inspiration to become a
-                software developer came from my desire to change the opinions
-                the world has on the rapidly expanding field of technology.
-                This wish has come primarily from the trend pioneered by Steve
-                Jobs which I endeavour to further by creating a software that
-                is suitable for all generations.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-lg-6 order-lg-2">
-            <div class="p-5">
-              <img class="img-fluid rounded-circle" src="img/03.jpg" alt="">
-            </div>
-          </div>
-          <div class="col-lg-6 order-lg-1">
-            <div class="p-5">
-              <h2 class="display-4">My Sporting Side</h2>
-              <p>I have always participated in a variety of sports including
-                street dance and skiing. Most notably I have played basketball
-                from the age of 10 and I continue now. Recently I have taken
-                up ice hockey and played with the ICL team at the
-                national competitions in April 2018.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="py-5 bg-black">
-      <div class="container">
-        <p class="m-0 text-center text-white small"> Tiger Cross 2018</p>
-      </div>
-      <!-- /.container -->
-    </footer>
-
-    <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-  </body>
-
-</html>
+                    <div class="tags">
+                        {% for tag in post.tags %}
+                            <a href="{{ site.baseurl }}/tags/#{{tag | slugify }}">{{ tag }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+        </article>
+    {% endfor %}
+</main>
