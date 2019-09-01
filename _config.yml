@@ -1,39 +1,49 @@
-# Site settings
-title: Tiger Cross
-description: My personal website with links to my various media accounts
-baseurl: "/Personal-Website" # the subpath of your site, e.g. /blog
-url: "https://tigercross.co.uk" # the base hostname & protocol for your site
-
-# User settings
-username: Tiger Cross
-user_description: Check out my CV, Github, Linkedin and more!
-user_title: Software Engineer 
-email: tiger.cross17@gmail.com
-github_username:  lorem_ipsum
-
 # Build settings
+permalink: /blog/:year/:title/
 markdown: kramdown
-highlighter: rouge
-permalink: /:title/
+highlighter: pygments
+plugins: [jekyll-paginate-v2]
 
-# html minify
-compress_html:
-  clippings: all
-  comments: all
-  endings: []
-  profile: false
+pagination:
+  enabled: true
+  per_page: 3
+  permalink: "/page/:num/"
 
-# Links to include in menu navigation
-# For external links add external: true
-links:
-  - title: Home
-    url: /
-  - title: Series
-    url: /series
-  - title: Tags
-    url: /tags
-  - title: About Me
-    url: /about
+comments: true
 
-# exclude my node related stuff
-exclude: ['package.json', 'src', 'node_modules']
+source: source
+destination: _site
+sass:
+  sass_dir: _sass
+  style: compressed # expanded
+
+# SEO settings
+title: Tiger Cross 
+description: "My personal portfolio"
+keywords: "Jekyll, personal, SEO, web, cv, portfolio, social, linkedin, github"
+url: http://tigercross.co.uk
+baseurl: "/home"
+
+google_analytics: UA-52446115-1
+repo: http://github.com/Tiger-Cross/Personal-Website
+disqus_shortname: "tiger"
+disqus_site_shortname: "tiger"
+
+# Author settings
+author:
+  name: Tiger Cross
+  job: Software Engineer
+  bio: "TODO: Bio"
+  thumb: /images/author.jpg
+  email: tiger.cross17@gmail.com
+  url: https://tigercross.co.uk/
+  github: https://github.com/Tiger-Cross
+  facebook: https://facebook.com/
+  linkedin: https://linkedin.com/in/Tiger-Cross
+
+# navbar pages
+navbar:
+  - slug: icons
+    title: Icons
+
+exclude: ["config.rb", "src", "Gemfile", "Gemfile.lock", "package.json","README.md", "Rakefile"]
