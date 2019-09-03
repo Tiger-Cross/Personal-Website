@@ -33,8 +33,9 @@ disqus_site_shortname: "tiger"
 author:
   name: Tiger Cross
   job: Software Engineer
-  bio: "TODO: Bio"
+  bio: "Studying Computing at Imperial College London, I'm excited and enthused by all things tech-related."
   thumb: /images/author.jpg
+  cv: /files/TigerCrossCV.pdf
   email: tiger.cross17@gmail.com
   url: https://tigercross.co.uk/
   github: https://github.com/Tiger-Cross
