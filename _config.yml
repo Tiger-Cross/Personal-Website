@@ -13,7 +13,7 @@ comments: true
 
 source: source
 destination: _site
-assets: _assets
+assets: assets
 sass:
   sass_dir: _sass
   style: compressed # expanded
