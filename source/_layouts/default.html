@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html>
-<head>
-  {% include head.html %}
-</head>
-<body>
-  {{ content }}
-</body>
+  <head>
+    {% include head.html %}
+  </head>
+  <body>
+    <!-- particles.js container -->
+    <div id="particles-js"></div>
+    {{ content }}
+    <!-- scripts -->
+    <script src="js/particles.js"></script>
+    <script src="js/app.js"></script>
+  </body>
 </html>
